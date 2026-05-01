@@ -4,31 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Actions\IndexItemAction;
+use App\Actions\StoreItemAction;
+use App\Actions\UpdateItemAction;
+use App\Actions\DestroyItemAction;
+
 class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(IndexItemAction $indexItemAction)
     {
-        $items = Item::all();
+        $items = $indexItemAction();
         return response()->json($items);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreItemAction $storeItemAction, Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'stock flag' => 'boolean',
-            'image' => 'nullable|url',
-        ]);
-        
-        $item = Item::create($validatedData);
+        $item = $storeItemAction($request);
         return response()->json($item, 201);
     }
 
@@ -44,27 +41,21 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        $item = Item::findOrFail($id);
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'stock flag' => 'boolean',
-            'image' => 'nullable|url',
-        ]);
-        $item->update($validatedData);
-        return response()->json($item);
-    }
+    public function update(Request $request, Item $item, UpdateItemAction $updateItemAction)
+{
+    
+    $updatedItem = $updateItemAction($request, $item);
+    
+    return response()->json($updatedItem);
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id,DestroyItemAction $destroyItemAction)
     {
-        $item = Item::findOrFail($id);
-        $item->delete();
+        $item = $destroyItemAction($id);
         return response()->json(null, 204);
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->integer('price')->unsigned();
-            $table->boolean('stock flag');
+            $table->boolean('stock_flag');
             $table->string('image');
             $table->text('description');
             $table->timestamps();
