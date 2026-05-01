@@ -1,0 +1,15 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app/
+
+    # مستوى الفحص (من 0 إلى 9)
+    level: 9
+
+    # إذا أردت تجاهل أخطاء معينة مستقبلاً يمكنك إضافتها هنا
+    ignoreErrors:
+
+    # تم إزالة الخيار المسبب للخطأ
